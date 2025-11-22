@@ -17,7 +17,7 @@ export function CheckEmail() {
     
     if (code.length !== 5) {
       toast.error("Please enter the complete 5-digit code.");
-      return;
+      return; 
     }
     
     // Front-end only - accept any 5-digit code
