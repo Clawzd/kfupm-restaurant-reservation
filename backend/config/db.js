@@ -1,15 +1,4 @@
-/**
- * Database configuration
- * 
- * What this file does:
- * - Connects to MongoDB database using connection string from .env
- * - Handles connection errors and disconnection events
- * - Manages graceful shutdown on process termination
- * 
- * Frontend usage:
- * - Not directly used by frontend
- * - Required for all backend operations (all API endpoints depend on database)
- */
+
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
@@ -42,5 +31,5 @@ const connectDB = async () => {
   }
 };
 
-export default connectDB;
 
+export default connectDB;
