@@ -1,12 +1,11 @@
 # KFUPM Restaurant Reservation System
 
-A full-stack web application for managing restaurant orders and reservations at KFUPM (King Fahd University of Petroleum and Minerals). Built with React, TypeScript, Express.js, and MongoDB.
+A full-stack web application for managing restaurant orders and reservations at KFUPM. Built with React, TypeScript, Express.js, and MongoDB.
 
 ## 🎯 Overview
 
-The system provides three user roles with tailored interfaces:
-
-- **Students**: Browse menu, place orders, track order status, view history
+The system provides three user roles:
+- **Students**: Browse menu, place orders, track status, view history
 - **Staff**: Manage orders, update status, control menu availability
 - **Managers**: Full admin dashboard with user management, reports, and archiving
 
@@ -14,243 +13,463 @@ The system provides three user roles with tailored interfaces:
 
 ## 🛠️ Tech Stack
 
-### Frontend
-- React 18 + TypeScript
-- Vite (build tool)
-- TailwindCSS + shadcn/ui
-- React Router + React Query
-
-### Backend
-- Node.js + Express.js
-- MongoDB + Mongoose
-- JWT Authentication
-- Multer (file uploads)
+| Frontend | Backend |
+|----------|---------|
+| React 18 + TypeScript | Node.js + Express.js |
+| Vite | MongoDB + Mongoose |
+| TailwindCSS + shadcn/ui | JWT Authentication |
+| React Router | Multer (file uploads) |
 
 ---
 
-## 🚀 Installation & Setup
+## 🚀 Backend Setup
 
 ### Prerequisites
 - Node.js 18+
-- MongoDB (local or Atlas)
+- MongoDB (local installation or MongoDB Atlas account)
 
-### 1. Clone Repository
-```bash
-git clone https://github.com/vMuhaymin/kfupm-restaurant-reservation.git
-cd kfupm-restaurant-reservation
-```
-
-### 2. Setup Backend
+### Step 1: Navigate to Backend
 ```bash
 cd backend
+```
+
+### Step 2: Install Dependencies
+```bash
 npm install
 ```
 
-Create `backend/.env` file:
+### Step 3: Configure Environment Variables
+Create a `.env` file in the `backend` directory:
 ```env
-MONGO_URI=your-mongodb-connection-string
-JWT_SECRET=your-secret-key
+# MongoDB Connection String
+MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/kfupm-restaurant
+
+# JWT Secret Key (use a strong random string)
+JWT_SECRET=your-super-secret-jwt-key-here
+
+# Server Configuration
 PORT=55555
 HOST=localhost
+NODE_ENV=development
 ```
 
-Start backend:
+### Step 4: Start the Server
 ```bash
+# Development mode (with hot-reload)
 npm run dev
+
+# Production mode
+npm start
 ```
 
-### 3. Setup Frontend
+The backend will be running at `http://localhost:55555`
+
+### Step 5: Verify Server is Running
 ```bash
-cd ..
+curl http://localhost:55555/api/health
+```
+Expected response:
+```json
+{ "message": "Server is running", "status": "OK" }
+```
+
+---
+
+## 🖥️ Frontend Setup
+
+### Step 1: Install Dependencies (from root directory)
+```bash
 npm install
+```
+
+### Step 2: Start Development Server
+```bash
 npm run dev
 ```
 
-### 4. Access Application
-- **Frontend:** http://localhost:3000
-- **Backend API:** http://localhost:55555/api
+Frontend will be available at `http://localhost:3000`
 
 ---
 
 ## 🔐 Demo Credentials
 
-| Role | Email | Password | Dashboard Path |
-|------|-------|----------|----------------|
-| Student | `student@system.com` | `student` | `/student/menu` |
-| Staff | `staff@system.com` | `staff` | `/staff/orders` |
-| Manager | `admin@system.com` | `admin` | `/manager/orders` |
+| Role | Email | Password |
+|------|-------|----------|
+| Student | `student@system.com` | `student` |
+| Staff | `staff@system.com` | `staff` |
+| Manager | `admin@system.com` | `admin` |
+
+---
+
+## 📡 API Documentation
+
+**Base URL:** `http://localhost:55555/api`
+
+### Authentication
+
+All protected endpoints require a JWT token in the header:
+```
+Authorization: Bearer <your-jwt-token>
+```
+
+---
+
+### Auth Endpoints
+
+#### POST `/api/auth/register`
+Register a new student account.
+
+**Request:**
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john@kfupm.edu.sa",
+  "password": "password123"
+}
+```
+
+**Response (201):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439011",
+  "username": "john",
+  "email": "john@kfupm.edu.sa",
+  "role": "student",
+  "firstName": "John",
+  "lastName": "Doe",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "message": "Account created successfully"
+}
+```
+
+---
+
+#### POST `/api/auth/login`
+Authenticate user and get JWT token.
+
+**Request:**
+```json
+{
+  "email": "student@system.com",
+  "password": "student"
+}
+```
+
+**Response (200):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439011",
+  "username": "student",
+  "email": "student@system.com",
+  "role": "student",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+**Error Response (401):**
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+---
+
+### Menu Endpoints
+
+#### GET `/api/menu`
+Get all menu items. Students see only available items; staff/managers see all.
+
+**Response (200):**
+```json
+[
+  {
+    "_id": "507f1f77bcf86cd799439012",
+    "name": "Grilled Chicken",
+    "description": "Delicious grilled chicken with herbs",
+    "category": "Main Course",
+    "price": 25,
+    "imagePath": "/menu_images/grilled-chicken.jpg",
+    "isAvailable": true
+  },
+  {
+    "_id": "507f1f77bcf86cd799439013",
+    "name": "French Fries",
+    "description": "Crispy golden fries",
+    "category": "Appetizers",
+    "price": 10,
+    "imagePath": "/menu_images/fries.jpg",
+    "isAvailable": true
+  }
+]
+```
+
+---
+
+#### POST `/api/menu` (Manager only)
+Create a new menu item.
+
+**Request:**
+```json
+{
+  "name": "Beef Burger",
+  "description": "Juicy beef patty with fresh vegetables",
+  "category": "Main Course",
+  "price": 30,
+  "imagePath": "/menu_images/beef-burger.jpg",
+  "isAvailable": true
+}
+```
+
+**Response (201):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439014",
+  "name": "Beef Burger",
+  "description": "Juicy beef patty with fresh vegetables",
+  "category": "Main Course",
+  "price": 30,
+  "imagePath": "/menu_images/beef-burger.jpg",
+  "isAvailable": true,
+  "createdAt": "2025-12-06T10:30:00.000Z"
+}
+```
+
+---
+
+#### PATCH `/api/menu/:id/toggle` (Staff/Manager)
+Toggle menu item availability.
+
+**Response (200):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439012",
+  "name": "Grilled Chicken",
+  "isAvailable": false,
+  "message": "Item availability updated"
+}
+```
+
+---
+
+### Order Endpoints (Student)
+
+#### POST `/api/orders`
+Create a new order.
+
+**Request:**
+```json
+{
+  "items": [
+    { "name": "Grilled Chicken", "quantity": 2, "price": 25 },
+    { "name": "French Fries", "quantity": 1, "price": 10 }
+  ],
+  "pickupTime": "12:30 PM",
+  "specialInstructions": "Extra sauce please"
+}
+```
+
+**Response (201):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439015",
+  "orderId": "ORD-001",
+  "userId": "507f1f77bcf86cd799439011",
+  "items": [
+    { "name": "Grilled Chicken", "quantity": 2, "price": 25 },
+    { "name": "French Fries", "quantity": 1, "price": 10 }
+  ],
+  "pickupTime": "12:30 PM",
+  "specialInstructions": "Extra sauce please",
+  "status": "pending",
+  "createdAt": "2025-12-06T10:35:00.000Z"
+}
+```
+
+---
+
+#### GET `/api/orders/current`
+Get student's active orders (pending, preparing, ready).
+
+**Response (200):**
+```json
+[
+  {
+    "_id": "507f1f77bcf86cd799439015",
+    "orderId": "ORD-001",
+    "items": [
+      { "name": "Grilled Chicken", "quantity": 2, "price": 25 }
+    ],
+    "pickupTime": "12:30 PM",
+    "status": "preparing",
+    "createdAt": "2025-12-06T10:35:00.000Z"
+  }
+]
+```
+
+---
+
+#### PATCH `/api/orders/:id/cancel`
+Cancel a pending order.
+
+**Response (200):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439015",
+  "orderId": "ORD-001",
+  "status": "cancelled",
+  "cancelledAt": "2025-12-06T10:40:00.000Z",
+  "canceledBy": "student"
+}
+```
+
+---
+
+### Staff Endpoints
+
+#### GET `/api/staff/orders`
+Get all active orders for staff to manage.
+
+**Response (200):**
+```json
+[
+  {
+    "_id": "507f1f77bcf86cd799439015",
+    "orderId": "ORD-001",
+    "userId": {
+      "_id": "507f1f77bcf86cd799439011",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@kfupm.edu.sa"
+    },
+    "items": [
+      { "name": "Grilled Chicken", "quantity": 2, "price": 25 }
+    ],
+    "pickupTime": "12:30 PM",
+    "status": "pending",
+    "createdAt": "2025-12-06T10:35:00.000Z"
+  }
+]
+```
+
+---
+
+#### PATCH `/api/staff/orders/:id/status`
+Update order status.
+
+**Request:**
+```json
+{
+  "status": "preparing"
+}
+```
+
+**Response (200):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439015",
+  "orderId": "ORD-001",
+  "status": "preparing",
+  "updatedAt": "2025-12-06T10:45:00.000Z"
+}
+```
+
+**Valid status values:** `pending`, `preparing`, `ready`, `picked`
+
+---
+
+### Manager Endpoints
+
+#### GET `/api/manager/users`
+Get all staff and manager users.
+
+**Response (200):**
+```json
+[
+  {
+    "_id": "507f1f77bcf86cd799439016",
+    "username": "staff1",
+    "email": "staff@system.com",
+    "role": "staff",
+    "createdAt": "2025-12-01T00:00:00.000Z"
+  }
+]
+```
+
+---
+
+#### POST `/api/manager/users`
+Create a new staff or manager account.
+
+**Request:**
+```json
+{
+  "username": "newstaff",
+  "password": "password123",
+  "role": "staff"
+}
+```
+
+**Response (201):**
+```json
+{
+  "_id": "507f1f77bcf86cd799439017",
+  "username": "newstaff",
+  "email": "newstaff@system.com",
+  "role": "staff",
+  "message": "User created successfully"
+}
+```
+
+---
+
+#### GET `/api/manager/reports`
+Get daily sales reports.
+
+**Query Parameters:** `?date=2025-12-06` (optional)
+
+**Response (200):**
+```json
+{
+  "date": "2025-12-06",
+  "totalOrders": 25,
+  "completedOrders": 20,
+  "cancelledOrders": 2,
+  "pendingOrders": 3,
+  "totalRevenue": 1250.50
+}
+```
 
 ---
 
 ## 📁 Project Structure
 
 ```
-kfupm-restaurant-reservation/
 ├── backend/
-│   ├── config/
-│   │   └── db.js                  # MongoDB connection
-│   ├── controllers/
-│   │   ├── authController.js      # Login, register, password reset
-│   │   ├── menuController.js      # Menu CRUD operations
-│   │   ├── orderController.js     # Student order management
-│   │   ├── staffController.js     # Staff order operations
-│   │   └── managerController.js   # Admin operations
-│   ├── middleware/
-│   │   ├── auth.js               # JWT authentication
-│   │   ├── optionalAuth.js       # Optional auth for public routes
-│   │   ├── upload.js             # Image upload config
-│   │   └── validateObjectId.js   # MongoDB ID validation
-│   ├── models/
-│   │   ├── User.js               # User schema
-│   │   ├── MenuItem.js           # Menu item schema
-│   │   ├── Order.js              # Order schema
-│   │   ├── ArchivedOrder.js      # Archived orders
-│   │   └── ResetCode.js          # Password reset codes
-│   ├── routes/
-│   │   ├── authRoutes.js         # /api/auth/*
-│   │   ├── menuRoutes.js         # /api/menu/*
-│   │   ├── orderRoutes.js        # /api/orders/*
-│   │   ├── staffRoutes.js        # /api/staff/*
-│   │   └── managerRoutes.js      # /api/manager/*
-│   ├── uploads/menu_images/       # Menu item images
-│   └── server.js                  # Express entry point
+│   ├── controllers/     # Route handlers
+│   ├── models/          # Mongoose schemas
+│   ├── routes/          # API routes
+│   ├── middleware/      # Auth, upload, validation
+│   └── server.js        # Entry point
 │
 ├── src/
-│   ├── pages/                     # React page components
-│   │   ├── Login.tsx, SignUp.tsx, ForgotPassword.tsx
-│   │   ├── BrowseMenu.tsx, MyCart.tsx, EditCart.tsx
-│   │   ├── CurrentOrders.tsx, OrderHistory.tsx
-│   │   ├── StaffDashboard.tsx, AdminDashboard.tsx
-│   │   └── Home.tsx, NotFound.tsx
-│   ├── components/
-│   │   ├── student/              # Student UI components
-│   │   ├── staff/                # Staff UI components
-│   │   ├── admin/                # Admin UI components
-│   │   └── ui/                   # shadcn/ui components
-│   ├── lib/
-│   │   └── api.ts                # API client functions
-│   └── App.tsx                    # Main app with routing
-│
-├── package.json
-└── README.md
-```
-
----
-
-## 📡 API Reference
-
-### Authentication
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register` | Register new student |
-| POST | `/api/auth/login` | User login (returns JWT) |
-| POST | `/api/auth/reset` | Request password reset code |
-| POST | `/api/auth/verify` | Verify reset code |
-| POST | `/api/auth/change-password` | Set new password |
-
-### Menu
-| Method | Endpoint | Description | Access |
-|--------|----------|-------------|--------|
-| GET | `/api/menu` | Get all menu items | Public |
-| POST | `/api/menu` | Create menu item | Manager |
-| PATCH | `/api/menu/:id` | Update menu item | Manager |
-| PATCH | `/api/menu/:id/toggle` | Toggle availability | Staff/Manager |
-| DELETE | `/api/menu/:id` | Delete menu item | Manager |
-| POST | `/api/menu/upload` | Upload menu image | Manager |
-
-### Orders (Student)
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/orders` | Create new order |
-| GET | `/api/orders/current` | Get active orders |
-| GET | `/api/orders/history` | Get order history |
-| PATCH | `/api/orders/:id` | Update pending order |
-| PATCH | `/api/orders/:id/cancel` | Cancel order |
-
-### Staff
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/staff/orders` | Get all active orders |
-| GET | `/api/staff/orders/cancelled` | Get cancelled orders |
-| PATCH | `/api/staff/orders/:id/status` | Update order status |
-| PATCH | `/api/staff/orders/:id/cancel` | Cancel order |
-
-### Manager
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/manager/users` | Get all staff/managers |
-| POST | `/api/manager/users` | Create user |
-| PATCH | `/api/manager/users/:id` | Update user |
-| DELETE | `/api/manager/users/:id` | Delete user |
-| GET | `/api/manager/orders` | Get all orders |
-| DELETE | `/api/manager/orders/cancelled` | Clear cancelled orders |
-| GET | `/api/manager/reports` | Get daily reports |
-| POST | `/api/manager/archive/bulk` | Archive old orders |
-| GET | `/api/manager/archive` | Get archived orders |
-
----
-
-## ✨ Features
-
-### Student Features
-- User registration and authentication
-- Browse menu by categories
-- Add items to cart with quantity control
-- Place orders with pickup time and special instructions
-- Track current orders in real-time
-- View order history
-- Cancel or edit pending orders
-- Password reset via email code
-
-### Staff Features
-- View all pending/preparing/ready orders
-- Update order status workflow
-- Toggle menu item availability
-- Cancel orders
-- View cancelled orders
-
-### Manager Features
-- All staff features plus:
-- Full menu management (CRUD)
-- User management (staff/manager accounts)
-- Daily sales reports and analytics
-- Archive completed orders
-- Bulk archive orders older than X days
-
----
-
-## 💻 Development Scripts
-
-### Frontend
-```bash
-npm run dev      # Start dev server (port 3000)
-npm run build    # Production build
-npm run lint     # Run ESLint
-```
-
-### Backend
-```bash
-cd backend
-npm run dev      # Start with hot-reload (port 55555)
-npm start        # Production mode
+│   ├── pages/           # React pages
+│   ├── components/      # UI components
+│   ├── lib/api.ts       # API client
+│   └── App.tsx          # Main app
 ```
 
 ---
 
 ## 👥 Team Members
 
-| Name | Role | Responsibilities |
-|------|------|------------------|
-| **Abdul Muhaymin** | Student Dashboard Lead | Menu browsing, cart, orders |
-| **Shaheer Ahmar** | Admin Dashboard Lead | Reports, user management |
-| **Ali Alsarhayd** | Auth & Staff Lead | Authentication, staff dashboard |
+| Name | Role |
+|------|------|
+| **Abdul Muhaymin** | Student Dashboard |
+| **Shaheer Ahmar** | Admin Dashboard |
+| **Ali Alsarhayd** | Auth & Staff Dashboard |
 
 ---
 
-## 📄 License
-
-This project was created for the SWE Web Development Foundations course at KFUPM.
-
----
-
-**Version:** 2.0.0 | **Last Updated:** December 2025 | **Status:** Full-Stack Complete
+**Version:** 2.0.0 | **Status:** Full-Stack Complete
