@@ -62,7 +62,9 @@ npm run dev
 npm start
 ```
 
-The backend will be running at `http://localhost:55555`
+# NOTE, WE Deployed the project using `https://kfupm-restaurant-reservation.onrender.com` So its no longer the local host
+# In other words, you can check the backend functionality via the deployment stage: `https://kfupm-restaurant-res.netlify.app`
+The backend will be running at `http://localhost:55555`  
 
 ### Step 5: Verify Server is Running
 ```bash
