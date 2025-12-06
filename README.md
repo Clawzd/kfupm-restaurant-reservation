@@ -1,6 +1,6 @@
 # KFUPM Restaurant Reservation System
 
-A modern, fully responsive web application for managing restaurant orders and reservations at KFUPM (King Fahd University of Petroleum and Minerals). Built with React, TypeScript, and TailwindCSS.
+A modern, full-stack web application for managing restaurant orders and reservations at KFUPM (King Fahd University of Petroleum and Minerals). Built with React, TypeScript, TailwindCSS, Express.js, and MongoDB.
 
 ## 📋 Table of Contents
 
@@ -9,25 +9,24 @@ A modern, fully responsive web application for managing restaurant orders and re
 - [Tech Stack](#tech-stack)
 - [Installation & Setup](#installation--setup)
 - [Project Structure](#project-structure)
+- [API Documentation](#api-documentation)
+- [Database Schema](#database-schema)
 - [Usage Guide](#usage-guide)
 - [Demo Credentials](#demo-credentials)
 - [Development](#development)
 - [Build & Deployment](#build--deployment)
 - [Team Members](#team-members)
 - [Contributing](#contributing)
-- [License](#license)
 
 ---
 
 ## 🎯 Project Overview
 
-The KFUPM Restaurant Reservation System is a comprehensive frontend application designed to streamline the food ordering process for students, staff, and administrators. The system provides three distinct user roles with tailored interfaces and functionalities:
+The KFUPM Restaurant Reservation System is a comprehensive full-stack application designed to streamline the food ordering process for students, staff, and administrators. The system provides three distinct user roles with tailored interfaces and functionalities:
 
 - **Students**: Browse menu, place orders, track order status, view order history
 - **Staff**: Manage orders, update order status, control menu availability
 - **Managers/Admins**: Full dashboard with analytics, user management, menu management, and order archiving
-
-This is a **frontend-only prototype** (Milestone 4) built for the SWE Web Development Foundations course. The backend will be developed using Express.js with MongoDB.
 
 ---
 
@@ -35,68 +34,72 @@ This is a **frontend-only prototype** (Milestone 4) built for the SWE Web Develo
 
 ### Student Features
 - ✅ User authentication (login/signup)
-- ✅ Browse restaurant menu with categories (Main Course, Appetizers, Beverages)
+- ✅ Browse restaurant menu with categories (Main Course, Appetizers, Beverages, Desserts)
 - ✅ Add items to shopping cart
 - ✅ View and manage cart with quantity adjustments
 - ✅ Place orders with pickup time and special instructions
-- ✅ Payment dialog (frontend only)
+- ✅ Payment dialog simulation
 - ✅ Track current orders in real-time
 - ✅ View order history with status tracking
-- ✅ Responsive mobile-friendly interface
+- ✅ Cancel pending orders
+- ✅ Edit pending orders
+- ✅ Password reset with 5-digit code
 
 ### Staff Features
 - ✅ View pending and active orders
-- ✅ Update order status (Pending → Preparing → Ready → Completed)
+- ✅ Update order status (Pending → Preparing → Ready → Picked)
 - ✅ Manage menu item availability
-- ✅ View canceled orders
-- ✅ Dashboard with order overview
+- ✅ View and manage canceled orders
+- ✅ Real-time order updates (5-second polling)
 
 ### Manager/Admin Features
 - ✅ Complete order management system
-- ✅ Menu management (add, edit, delete items)
-- ✅ User management (staff and manager accounts)
+- ✅ Menu management (add, edit, delete items with image upload)
+- ✅ User management (create/edit/delete staff and manager accounts)
 - ✅ Daily reports and analytics
 - ✅ Archive completed orders
+- ✅ Bulk archive orders older than X days
+- ✅ Clear cancelled orders
 - ✅ System-wide dashboard
 
 ### General Features
 - ✅ Fully responsive design (mobile, tablet, desktop)
-- ✅ Dark mode support
-- ✅ Accessibility-first approach
+- ✅ JWT-based authentication
+- ✅ Role-based access control
 - ✅ Toast notifications for user feedback
-- ✅ Password recovery flow
 - ✅ Session management with localStorage
 - ✅ Professional UI with shadcn/ui components
+- ✅ RESTful API design
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend Framework
-- **React** 18.3.1 - UI library
-- **TypeScript** 5.8.3 - Type-safe JavaScript
-- **Vite** 5.4.19 - Fast build tool and dev server
+### Frontend
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| React | 18.3.1 | UI library |
+| TypeScript | 5.8.3 | Type-safe JavaScript |
+| Vite | 5.4.19 | Build tool and dev server |
+| TailwindCSS | 3.4.17 | Utility-first CSS framework |
+| shadcn/ui | - | High-quality React components |
+| React Router | 6.30.1 | Client-side routing |
+| React Query | 5.83.0 | Server state management |
+| Sonner | 1.7.4 | Toast notifications |
+| Lucide React | 0.462.0 | Icon library |
 
-### Styling & UI
-- **TailwindCSS** 3.4.17 - Utility-first CSS framework
-- **shadcn/ui** - High-quality React components
-- **Lucide React** 0.462.0 - Beautiful icon library
-- **PostCSS** 8.5.6 - CSS processing
-
-### Routing & State Management
-- **React Router** 6.30.1 - Client-side routing
-- **React Query** 5.83.0 - Server state management (prepared for API integration)
-- **React Hook Form** 7.61.1 - Efficient form handling
-- **Zod** 3.25.76 - TypeScript-first schema validation
-
-### Notifications & UI Feedback
-- **Sonner** 1.7.4 - Toast notifications
-- **Radix UI** - Accessible component primitives
-
-### Development Tools
-- **ESLint** 9.32.0 - Code linting
-- **TypeScript ESLint** 8.38.0 - TypeScript linting
-- **Autoprefixer** 10.4.21 - CSS vendor prefixes
+### Backend
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Node.js | 18+ | JavaScript runtime |
+| Express.js | 4.18.2 | Web framework |
+| MongoDB | - | NoSQL database |
+| Mongoose | 8.0.3 | MongoDB ODM |
+| JWT | 9.0.2 | Authentication tokens |
+| bcryptjs | 2.4.3 | Password hashing |
+| Multer | 2.0.2 | File upload handling |
+| CORS | 2.8.5 | Cross-origin resource sharing |
+| dotenv | 16.3.1 | Environment variables |
 
 ---
 
@@ -104,119 +107,314 @@ This is a **frontend-only prototype** (Milestone 4) built for the SWE Web Develo
 
 ### Prerequisites
 - **Node.js** 18.0.0 or higher
-- **npm** 9.0.0 or higher (or yarn/pnpm)
+- **npm** 9.0.0 or higher
+- **MongoDB** (local or MongoDB Atlas)
 - **Git** for version control
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/vMuhaymin/kfupm-restaurant-reservation
-cd kfupm-restaurant-system
+git clone https://github.com/vMuhaymin/kfupm-restaurant-reservation.git
+cd kfupm-restaurant-reservation
 ```
 
-### Step 2: Install Dependencies
+### Step 2: Setup Backend
+
 ```bash
+# Navigate to backend directory
+cd backend
+
+# Install dependencies
 npm install
+
+# Create .env file
 ```
 
-### Step 3: Start Development Server
+Create a `.env` file in the `backend` directory:
+```env
+MONGO_URI=mongodb+srv://your-connection-string
+JWT_SECRET=your-secret-key
+PORT=55555
+HOST=localhost
+NODE_ENV=development
+```
+
 ```bash
+# Start backend server
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+Backend will be available at `http://localhost:55555`
 
-### Step 4: Build for Production
+### Step 3: Setup Frontend
+
 ```bash
-npm run build
+# Navigate to root directory (from backend)
+cd ..
+
+# Install dependencies
+npm install
+
+# Start frontend development server
+npm run dev
 ```
 
-### Step 5: Preview Production Build
-```bash
-npm run preview
-```
+Frontend will be available at `http://localhost:3000`
 
 ---
 
 ## 📁 Project Structure
 
 ```
-kfupm-restaurant-system/
-├── src/
-│   ├── pages/                      # Page components (full-page views)
-│   │   ├── Login.tsx              # Student/Staff/Admin login
-│   │   ├── SignUp.tsx             # User registration
-│   │   ├── ForgotPassword.tsx      # Password recovery
-│   │   ├── CheckEmail.tsx          # Email verification
-│   │   ├── SetNewPassword.tsx      # Password reset
-│   │   ├── Home.tsx               # Student home page
-│   │   ├── BrowseMenu.tsx         # Menu browsing
-│   │   ├── MyCart.tsx             # Shopping cart
-│   │   ├── CurrentOrders.tsx      # Active orders
-│   │   ├── OrderHistory.tsx       # Past orders
-│   │   ├── StaffDashboard.tsx     # Staff management
-│   │   ├── AdminDashboard.tsx     # Admin management
-│   │   └── NotFound.tsx           # 404 page
+kfupm-restaurant-reservation/
+├── backend/                        # Express.js Backend
+│   ├── config/
+│   │   └── db.js                  # MongoDB connection
 │   │
-│   ├── components/                 # Reusable components
-│   │   ├── student/               # Student-specific components
+│   ├── controllers/               # Route handlers
+│   │   ├── authController.js      # Authentication logic
+│   │   ├── menuController.js      # Menu CRUD operations
+│   │   ├── orderController.js     # Student order operations
+│   │   ├── staffController.js     # Staff order management
+│   │   └── managerController.js   # Admin operations
+│   │
+│   ├── middleware/                # Express middleware
+│   │   ├── auth.js               # JWT auth & role authorization
+│   │   ├── optionalAuth.js       # Optional authentication
+│   │   ├── upload.js             # Multer file upload config
+│   │   └── validateObjectId.js   # MongoDB ID validation
+│   │
+│   ├── models/                    # Mongoose schemas
+│   │   ├── User.js               # User model
+│   │   ├── MenuItem.js           # Menu item model
+│   │   ├── Order.js              # Order model
+│   │   ├── ArchivedOrder.js      # Archived order model
+│   │   └── ResetCode.js          # Password reset codes
+│   │
+│   ├── routes/                    # API route definitions
+│   │   ├── authRoutes.js         # /api/auth/*
+│   │   ├── menuRoutes.js         # /api/menu/*
+│   │   ├── orderRoutes.js        # /api/orders/*
+│   │   ├── staffRoutes.js        # /api/staff/*
+│   │   └── managerRoutes.js      # /api/manager/*
+│   │
+│   ├── uploads/                   # Static file storage
+│   │   └── menu_images/          # Menu item images
+│   │
+│   ├── server.js                  # Express app entry point
+│   └── package.json               # Backend dependencies
+│
+├── src/                           # React Frontend
+│   ├── pages/                     # Page components
+│   │   ├── Login.tsx
+│   │   ├── SignUp.tsx
+│   │   ├── ForgotPassword.tsx
+│   │   ├── CheckEmail.tsx
+│   │   ├── SetNewPassword.tsx
+│   │   ├── Home.tsx
+│   │   ├── BrowseMenu.tsx
+│   │   ├── MyCart.tsx
+│   │   ├── EditCart.tsx
+│   │   ├── CurrentOrders.tsx
+│   │   ├── OrderHistory.tsx
+│   │   ├── StaffDashboard.tsx
+│   │   ├── AdminDashboard.tsx
+│   │   └── NotFound.tsx
+│   │
+│   ├── components/
+│   │   ├── auth/
+│   │   │   └── ProtectedRoute.tsx
+│   │   ├── student/
 │   │   │   ├── StudentNavbar.tsx
+│   │   │   ├── Navbar.tsx
 │   │   │   ├── MenuCard.tsx
 │   │   │   ├── MenuSection.tsx
 │   │   │   ├── PaymentDialog.tsx
 │   │   │   └── OrderConfirmationDialog.tsx
-│   │   ├── staff/                 # Staff-specific components
+│   │   ├── staff/
 │   │   │   ├── ViewOrders.tsx
 │   │   │   ├── CanceledOrders.tsx
 │   │   │   └── MenuAvailability.tsx
-│   │   ├── admin/                 # Admin-specific components
+│   │   ├── admin/
 │   │   │   ├── MenuManagement.tsx
 │   │   │   ├── UserManagement.tsx
 │   │   │   ├── DailyReports.tsx
 │   │   │   └── ArchiveOrders.tsx
-│   │   ├── common/                # Shared components
+│   │   ├── common/
+│   │   │   ├── LandingNavbar.tsx
 │   │   │   └── ImageWithFallback.tsx
-│   │   └── ui/                    # shadcn/ui components
-│   │       ├── button.tsx
-│   │       ├── input.tsx
-│   │       ├── card.tsx
-│   │       ├── badge.tsx
-│   │       ├── dialog.tsx
-│   │       └── ... (40+ UI components)
+│   │   └── ui/                    # shadcn/ui components (40+)
 │   │
-│   ├── types/                      # TypeScript type definitions
-│   │   └── index.ts               # Centralized types
+│   ├── lib/
+│   │   ├── api.ts                # API client functions
+│   │   └── utils.ts              # Helper functions
 │   │
-│   ├── hooks/                      # Custom React hooks
-│   │   └── use-mobile.tsx         # Mobile detection hook
+│   ├── types/
+│   │   └── index.ts              # TypeScript definitions
 │   │
-│   ├── lib/                        # Utility functions
-│   │   └── utils.ts               # Helper functions
+│   ├── hooks/
+│   │   └── use-mobile.tsx        # Mobile detection
 │   │
-│   ├── assets/                     # Static images and media
-│   │   ├── chef-hero.jpg
-│   │   ├── loginres.png
-│   │   ├── roasted-corn.jpg
-│   │   ├── asparagus-salad.jpg
-│   │   ├── shrimp-skewers.jpg
-│   │   ├── vegetable-mixups.jpg
-│   │   └── wrap-sandwich.jpg
-│   │
-│   ├── App.tsx                     # Main app component with routing
-│   ├── main.tsx                    # React entry point
-│   └── index.css                   # Global styles and design system
+│   ├── assets/                    # Static images
+│   ├── App.tsx                    # Main app with routing
+│   ├── main.tsx                   # React entry point
+│   └── index.css                  # Global styles
 │
-├── public/                         # Static files
-├── index.html                      # HTML entry point
-├── vite.config.ts                  # Vite configuration
-├── tailwind.config.ts              # TailwindCSS configuration
-├── postcss.config.js               # PostCSS configuration
-├── tsconfig.json                   # TypeScript configuration
-├── eslint.config.js                # ESLint configuration
-├── package.json                    # Dependencies and scripts
-├── package-lock.json               # Locked dependency versions
-├── .gitignore                      # Git ignore rules
-├── README.md                       # This file
-└── ASSESSMENT.md                   # Professional code assessment
+├── index.html
+├── vite.config.ts
+├── tailwind.config.ts
+├── tsconfig.json
+├── package.json
+└── README.md
+```
+
+---
+
+## 📡 API Documentation
+
+### Base URL
+```
+http://localhost:55555/api
+```
+
+### Authentication
+All protected routes require a JWT token in the Authorization header:
+```
+Authorization: Bearer <token>
+```
+
+### Endpoints
+
+#### Authentication (`/api/auth`)
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| POST | `/register` | Register new student | Public |
+| POST | `/login` | User login | Public |
+| POST | `/reset` | Request password reset code | Public |
+| POST | `/verify` | Verify reset code | Public |
+| POST | `/change-password` | Change password with code | Public |
+
+#### Menu (`/api/menu`)
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| GET | `/` | Get all menu items | Public (filtered by role) |
+| GET | `/:id` | Get single menu item | Public |
+| POST | `/` | Create menu item | Manager |
+| PATCH | `/:id` | Update menu item | Manager |
+| PATCH | `/:id/toggle` | Toggle availability | Staff/Manager |
+| DELETE | `/:id` | Delete menu item | Manager |
+| POST | `/upload` | Upload menu image | Manager |
+
+#### Orders - Student (`/api/orders`)
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| POST | `/` | Create new order | Student |
+| GET | `/current` | Get active orders | Student |
+| GET | `/history` | Get order history | Student |
+| GET | `/:id` | Get order details | Authenticated |
+| PATCH | `/:id` | Update pending order | Student |
+| PATCH | `/:id/cancel` | Cancel pending order | Student |
+
+#### Staff (`/api/staff`)
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| GET | `/orders` | Get all active orders | Staff/Manager |
+| GET | `/orders/cancelled` | Get cancelled orders | Staff/Manager |
+| PATCH | `/orders/:id/status` | Update order status | Staff/Manager |
+| PATCH | `/orders/:id/cancel` | Cancel order | Staff/Manager |
+
+#### Manager (`/api/manager`)
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| GET | `/users` | Get all staff/managers | Manager |
+| POST | `/users` | Create staff/manager | Manager |
+| PATCH | `/users/:id` | Update user | Manager |
+| DELETE | `/users/:id` | Delete user | Manager |
+| GET | `/orders` | Get all orders | Manager |
+| GET | `/orders/cancelled` | Get cancelled orders | Manager |
+| DELETE | `/orders/cancelled` | Clear cancelled orders | Manager |
+| GET | `/reports` | Get daily reports | Manager |
+| POST | `/archive/:orderId` | Archive single order | Manager |
+| POST | `/archive/bulk` | Bulk archive orders | Manager |
+| GET | `/archive` | Get archived orders | Manager |
+
+---
+
+## 🗄️ Database Schema
+
+### User
+```javascript
+{
+  username: String (unique),
+  email: String (unique),
+  password: String (hashed),
+  role: 'student' | 'staff' | 'manager',
+  firstName: String,
+  lastName: String,
+  createdAt: Date
+}
+```
+
+### MenuItem
+```javascript
+{
+  name: String,
+  description: String,
+  category: String,
+  price: Number,
+  imagePath: String,
+  isAvailable: Boolean,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### Order
+```javascript
+{
+  orderId: String (unique, e.g., "ORD-001"),
+  userId: ObjectId (ref: User),
+  items: [{
+    name: String,
+    quantity: Number,
+    price: Number
+  }],
+  specialInstructions: String,
+  pickupTime: String,
+  status: 'pending' | 'preparing' | 'ready' | 'picked' | 'cancelled',
+  cancelledAt: Date,
+  canceledBy: 'student' | 'staff' | 'manager',
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### ArchivedOrder
+```javascript
+{
+  orderId: String,
+  userId: ObjectId (ref: User),
+  items: [{ name, quantity, price }],
+  specialInstructions: String,
+  pickupTime: String,
+  status: String,
+  createdAt: Date,
+  cancelledAt: Date,
+  archivedAt: Date
+}
+```
+
+### ResetCode
+```javascript
+{
+  email: String,
+  code: String (5-digit),
+  expiresAt: Date (10 min TTL)
+}
 ```
 
 ---
@@ -225,78 +423,52 @@ kfupm-restaurant-system/
 
 ### For Students
 
-#### 1. Login
-- Navigate to the login page
-- Use demo credentials:
-  - **Email:** `student@system.com`
-  - **Password:** `student`
-- Click "Log In" to access the student dashboard
+1. **Register/Login**
+   - Navigate to `/auth/signup` to create a new account
+   - Or login at `/auth/login` with existing credentials
 
-#### 2. Browse Menu
-- Click "Browse Menu" in the navigation
-- View items organized by category:
-  - Main Course
-  - Appetizers
-  - Beverages
-- Click the "+" button to add items to cart
-- Sold-out items are marked with a "SOLD OUT" badge
+2. **Browse Menu**
+   - View items organized by category
+   - Add items to cart using the "+" button
+   - Sold-out items are marked with a "SOLD OUT" badge
 
-#### 3. Manage Cart
-- Click the shopping cart icon in the navbar
-- Adjust quantities using +/- buttons
-- Add special instructions (optional)
-- Select pickup time
-- Click "Place Order" to proceed to payment
+3. **Place Order**
+   - Go to cart, adjust quantities
+   - Add special instructions (optional)
+   - Select pickup time
+   - Complete payment
 
-#### 4. Track Orders
-- **Current Orders:** View active orders being prepared
-- **Order History:** View past completed/cancelled orders
-- Each order shows:
-  - Order ID
-  - Status (Confirmed, Being prepared, Completed, Cancelled)
-  - Items and quantities
-  - Total price
-  - Pickup time
+4. **Track Orders**
+   - View current orders at `/student/current-orders`
+   - Check order history at `/student/order-history`
+   - Cancel or edit pending orders
 
 ### For Staff
 
-#### 1. Login
-- **Email:** `staff@system.com`
-- **Password:** `staff`
+1. **Login** at `/auth/login`
+2. **View Orders** - See all pending/preparing/ready orders
+3. **Update Status** - Progress orders through the workflow
+4. **Manage Menu** - Toggle item availability
+5. **View Cancelled** - Access cancelled orders
 
-#### 2. Manage Orders
-- View pending orders in "View Orders" tab
-- Update order status:
-  - Pending → Preparing → Ready → Completed
-- View canceled orders in "Canceled Orders" tab
-- Manage menu availability in "Menu Availability" tab
+### For Managers
 
-### For Managers/Admins
-
-#### 1. Login
-- **Email:** `admin@system.com`
-- **Password:** `admin`
-
-#### 2. Access Dashboard Sections
-- **Orders:** View and manage all orders
-- **Menu Management:** Add, edit, delete menu items
-- **User Management:** Manage staff and manager accounts
-- **Daily Reports:** View analytics and reports
-- **Archive Orders:** Access historical order data
+1. **Login** at `/auth/login`
+2. **All Staff Features** plus:
+   - Menu Management (full CRUD)
+   - User Management (staff/manager accounts)
+   - Daily Reports & Analytics
+   - Order Archiving
 
 ---
 
 ## 🔐 Demo Credentials
 
-The application includes pre-configured demo accounts for testing:
-
-| Role | Email | Password | Path |
-|------|-------|----------|------|
-| Student | `student@system.com` | `student` | `/student/home` |
+| Role | Email | Password | Dashboard |
+|------|-------|----------|-----------|
+| Student | `student@system.com` | `student` | `/student/menu` |
 | Staff | `staff@system.com` | `staff` | `/staff/orders` |
 | Manager | `admin@system.com` | `admin` | `/manager/orders` |
-
-**Note:** These are frontend-only credentials for demonstration. In production, authentication will be handled by the Express.js backend with MongoDB.
 
 ---
 
@@ -304,44 +476,36 @@ The application includes pre-configured demo accounts for testing:
 
 ### Available Scripts
 
+#### Frontend
 ```bash
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Build in development mode
-npm run build:dev
-
-# Preview production build
-npm run preview
-
-# Run ESLint
-npm run lint
+npm run dev          # Start development server (port 3000)
+npm run build        # Build for production
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
 ```
 
-### Code Style & Conventions
-
-- **Component naming:** PascalCase (e.g., `StudentNavbar.tsx`)
-- **File naming:** PascalCase for components, camelCase for utilities
-- **Imports:** Use absolute imports with `@` alias
-- **TypeScript:** Strict mode enabled, all components typed
-- **Styling:** TailwindCSS utility classes, no inline styles
-- **Comments:** JSDoc for components, inline for complex logic
-
-### ESLint Configuration
-
-The project uses ESLint with TypeScript support. Run linting:
-
+#### Backend
 ```bash
-npm run lint
+cd backend
+npm run dev          # Start with hot-reload (port 55555)
+npm start            # Start production server
 ```
 
-Key rules:
-- React hooks rules enforced
-- Unused variables warnings
-- React refresh compatibility
+### Environment Variables
+
+#### Backend (.env)
+```env
+MONGO_URI=mongodb+srv://...
+JWT_SECRET=your-secret-key
+PORT=55555
+HOST=localhost
+NODE_ENV=development
+```
+
+#### Frontend (.env)
+```env
+VITE_API_URL=http://localhost:55555/api
+```
 
 ---
 
@@ -350,34 +514,19 @@ Key rules:
 ### Production Build
 
 ```bash
+# Frontend
 npm run build
-```
+# Output in dist/
 
-This creates an optimized build in the `dist/` directory.
+# Backend
+cd backend
+npm start
+```
 
 ### Deployment Options
-
-The application can be deployed to:
-- **Netlify** - Recommended for static sites
-- **Vercel** - Optimized for React apps
-- **GitHub Pages** - Free hosting
-- **AWS S3 + CloudFront** - Scalable solution
-- **Traditional web servers** - Apache, Nginx
-
-### Environment Variables
-
-Create a `.env` file in the root directory (not committed to Git):
-
-```env
-# Example environment variables
-VITE_API_URL=http://localhost:5000/api
-VITE_APP_NAME=KFUPM Restaurant
-```
-
-Access in code:
-```typescript
-const apiUrl = import.meta.env.VITE_API_URL;
-```
+- **Frontend**: Netlify, Vercel, GitHub Pages
+- **Backend**: Railway, Render, Heroku, AWS EC2
+- **Database**: MongoDB Atlas
 
 ---
 
@@ -385,68 +534,32 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 | Name | Role | Responsibilities |
 |------|------|------------------|
-| **Abdul Muhaymin** | Student Dashboard Lead | Student dashboard and all related components | 
-| **Shaheer Ahmar** | Admin Dashboard Lead | Complete admin dashboard implementation | 
-| **Ali Alsarhayd** | Auth & Staff Dashboard Lead | Authentication pages, staff dashboard, and staff-related components | 
+| **Abdul Muhaymin** | Student Dashboard Lead | Student dashboard, menu browsing, cart, orders |
+| **Shaheer Ahmar** | Admin Dashboard Lead | Admin dashboard, reports, user management |
+| **Ali Alsarhayd** | Auth & Staff Dashboard Lead | Authentication, staff dashboard, backend integration |
 
 ---
 
 ## 🤝 Contributing
 
-### Development Workflow
+### Workflow
 
-1. **Create a feature branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
+1. Create feature branch: `git checkout -b feature/your-feature`
+2. Make changes following code conventions
+3. Test thoroughly
+4. Commit: `git commit -m "feat: description"`
+5. Push: `git push origin feature/your-feature`
+6. Create Pull Request
 
-2. **Make your changes**
-   - Write clean, well-documented code
-   - Follow the code style conventions
-   - Add comments for complex logic
-
-3. **Test your changes**
-   ```bash
-   npm run dev
-   # Test in browser
-   ```
-
-4. **Commit with meaningful messages**
-   ```bash
-   git add .
-   git commit -m "feat: add new feature description"
-   ```
-
-5. **Push to your branch**
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-
-6. **Create a Pull Request**
-   - Describe your changes
-   - Reference any related issues
-   - Wait for code review
-
-### Commit Message Convention
-
-Follow conventional commits:
+### Commit Convention
 - `feat:` - New feature
 - `fix:` - Bug fix
 - `docs:` - Documentation
-- `style:` - Code style (formatting, missing semicolons, etc.)
 - `refactor:` - Code refactoring
-- `perf:` - Performance improvements
-- `test:` - Adding tests
-- `chore:` - Build process, dependencies
+- `chore:` - Build/dependencies
 
-Example:
-```bash
-git commit -m "feat: add order tracking functionality"
-git commit -m "fix: resolve cart calculation bug"
-git commit -m "docs: update README with setup instructions"
-```
+---
 
-
-**Last Updated:** November 22, 2025  
-**Version:** 1.0.0  
-**Status:** Frontend Complete (Milestone 4)
+**Last Updated:** December 6, 2025  
+**Version:** 2.0.0  
+**Status:** Full-Stack Complete
