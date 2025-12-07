@@ -20,13 +20,13 @@ export function Login() {
   const getRolePath = (role: string) => {
     switch (role) {
       case "student":
-        return "/student/home";
+        return "/student/menu";  // Redirect to menu page, not home (which is the landing page)
       case "staff":
         return "/staff/orders";
       case "manager":
         return "/manager/orders";
       default:
-        return "/student/home";
+        return "/student/menu";
     }
   };
 
@@ -109,25 +109,8 @@ export function Login() {
       // Show success message
       toast.success(`Welcome! Redirecting to ${data.role} dashboard...`);
       
-      // Edge-specific fix: Use immediate synchronous redirect
-      // Edge requires a more direct approach - don't use setTimeout or async operations
-      console.log('Executing immediate redirect to:', redirectPath);
-      
-      
-      const doRedirect = () => {
-        try {
-          // Try window.location.replace first (doesn't add to history)
-          window.location.replace(redirectPath);
-        } catch (e) {
-          // Fallback to window.location.href
-          console.error('Replace failed, using href:', e);
-          window.location.href = redirectPath;
-        }
-      };
-      
-      // Use a very short timeout to ensure localStorage write completes
-      
-      setTimeout(doRedirect, 50);
+      // Use React Router's navigate for SPA navigation (no full page reload)
+      navigate(redirectPath, { replace: true });
     } catch (error: any) {
       console.error('Login error:', error);
       setIsLoading(false);
@@ -138,7 +121,7 @@ export function Login() {
       
       // Check if it's a network/connection error
       if (errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError') || errorMessage.includes('Cannot connect')) {
-        toast.error("Cannot connect to server. Please make sure the backend is running on http://localhost:55555");
+        toast.error("Cannot connect to server. Please make sure the backend is running on https://kfupm-restaurant-reservation.onrender.com");
       } else {
         toast.error(errorMessage);
       }
@@ -192,7 +175,7 @@ export function Login() {
 
               <div className="text-center">
                 <Link
-                  to="/forgot-password"
+                  to="/auth/forgot-password"
                   className="text-primary hover:underline text-sm font-medium"
                 >
                   Forgot password?
@@ -210,7 +193,7 @@ export function Login() {
                   Don't have an account?{" "}
                 </span>
                 <Link
-                  to="/signup"
+                  to="/auth/signup"
                   className="text-primary hover:underline text-sm font-medium"
                 >
                   Sign Up

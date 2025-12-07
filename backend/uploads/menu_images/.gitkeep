@@ -1,0 +1,4 @@
+# Place menu images here
+# Example: burger.png, pizza.png, salad.png
+# MongoDB will store paths like: "/menu_images/burger.png"
+
